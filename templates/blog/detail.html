@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block title %}{{ article.article_title }}{% endblock %}
+
+{% block content %}
+    <div class="blog-post bg-light p-md-5" xmlns="http://www.w3.org/1999/html">
+        <h2 class="blog-post-title text-info font-italic text-center">{{ article.article_title }}</h2>
+
+        <p class="blog-post-meta text-muted text-right">{{ article.pub_date }} by <b>{{ article.author_name }}</b></p>
+
+        <p class="blog-post-text font-weight-light"> {{ article.article_text }} </p>
+    </div>
+
+    <hr>
+    {% if latest_comments_list %}
+        {% for c in latest_comments_list %}
+            <p>
+                <strong class="pl-5">{{ c.author_name }}</strong><l class="blog-post-meta text-muted"> {{ c.pub_date }}</l>
+                <p class="text-dark pl-5 font-weight-light">{{ c.comment_text }}</p>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p class="bg-warning text-dark pl-5 font-weight-light">No comments yet! Make your own first!</p>
+    {% endif %}
+    <hr>
+
+    <form class="pl-5" action="{% url 'blog:leave_comment' article.id %}" method="POST">
+
+        {% csrf_token %}
+
+        <input class="form-control" id="exampleFormControlInput1" name="name" placeholder="Your name" required/>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="text" required="" placeholder="Comment text" cols="30" rows="10"></textarea><br>
+
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Leave comment</button>
+    </form>
+{% endblock %}
+
